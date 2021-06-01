@@ -1,0 +1,11 @@
+database:
+  database: weekly_local
+  host: localhost
+  port: 5432
+  username: postgres
+  password: postgres
+server:
+  port: 7000
+logging:
+  level: information
+product-sheet-id: 1lonUdpTFQlLZ6kVj4fSOkFeJCNIBq6WmMQQDLlnINMs

@@ -1,0 +1,8 @@
+{
+    "javascript.preferences.quoteStyle": "double",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.tslint": true
+    },
+    "tslint.configFile": "./app/tslint.json",
+    "editor.formatOnSave": true
+}

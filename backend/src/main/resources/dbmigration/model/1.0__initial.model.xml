@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="account" pkName="pk_account">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="shared_secret" type="varbinary"/>
+            <column name="first_name" type="varchar" notnull="true"/>
+            <column name="last_name" type="varchar" notnull="true"/>
+            <column name="is_paid" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="account_role" pkName="pk_account_role">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="account_id" type="bigint" notnull="true" references="account.id" foreignKeyName="fk_account_role_account_id" foreignKeyIndex="ix_account_role_account_id"/>
+            <column name="role" type="varchar(5)" notnull="true" checkConstraint="check ( role in ('USER','ADMIN'))" checkConstraintName="ck_account_role_role"/>
+        </createTable>
+        <createTable name="product" pkName="pk_product">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar" notnull="true"/>
+            <column name="unit" type="varchar" notnull="true"/>
+            <column name="category_id" type="bigint" notnull="true" references="product_category.id" foreignKeyName="fk_product_category_id" foreignKeyIndex="ix_product_category_id"/>
+        </createTable>
+        <createTable name="product_category" pkName="pk_product_category">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar" notnull="true"/>
+        </createTable>
+        <createTable name="share_operation" identityType="sequence" sequenceAllocate="50" pkName="pk_share_operation">
+            <column name="collection" type="varchar" notnull="true"/>
+            <column name="doc_id" type="varchar" notnull="true"/>
+            <column name="version" type="integer" notnull="true"/>
+            <column name="operation" type="jsonb" notnull="true"/>
+        </createTable>
+        <createTable name="share_snapshot" identityType="sequence" sequenceAllocate="50" pkName="pk_share_snapshot">
+            <column name="collection" type="varchar" notnull="true"/>
+            <column name="doc_id" type="varchar" notnull="true"/>
+            <column name="doc_type" type="varchar" notnull="true"/>
+            <column name="version" type="integer" notnull="true"/>
+            <column name="data" type="jsonb" notnull="true"/>
+        </createTable>
+        <createTable name="workspace" pkName="pk_workspace">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar" notnull="true"/>
+        </createTable>
+        <createTable name="workspace_invitation" pkName="pk_workspace_invitation">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="workspace_id" type="bigint" notnull="true" references="workspace.id" foreignKeyName="fk_workspace_invitation_workspace_id" foreignKeyIndex="ix_workspace_invitation_workspace_id"/>
+            <column name="code" type="varchar" notnull="true"/>
+            <column name="is_single_use" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="valid_until" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="workspace_member" pkName="pk_workspace_member">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="account_id" type="bigint" notnull="true" references="account.id" foreignKeyName="fk_workspace_member_account_id" foreignKeyIndex="ix_workspace_member_account_id"/>
+            <column name="workspace_id" type="bigint" notnull="true" references="workspace.id" foreignKeyName="fk_workspace_member_workspace_id" foreignKeyIndex="ix_workspace_member_workspace_id"/>
+            <column name="is_admin" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="is_creator" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>
